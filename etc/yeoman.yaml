@@ -1,0 +1,56 @@
+- hosts: yeoman-vm
+
+  tasks:
+
+    ### Prepare packages
+    - name: "Update the apt cache if older than one day"
+      sudo: yes
+      apt: update_cache=yes cache_valid_time=86400
+
+    ### Install prerequisites
+    - name: "Ensure that necessary packages are installed"
+      apt: name={{ item }} state=present
+      sudo: yes
+      with_items:
+        - git
+        - build-essential
+        - curl
+        - python-software-properties
+        - rubygems
+
+    - name: "Download and modify apt sources for node.js"
+      command: "/usr/bin/curl -sL https://deb.nodesource.com/setup | bash -"
+
+    - name: "Update the cache"
+      sudo: yes
+      apt: update_cache=yes
+
+    - name: "Install Node.js"
+      apt: name={{ item }} state=present
+      sudo: yes
+      with_items:
+        - nodejs
+
+    - name: "Install NPM Modules"
+      sudo: yes
+      npm: name={{ item }} global=yes
+      with_items:
+        - coffee-script
+        - gulp
+        - yo
+        - generator-webapp
+        - generator-angular
+
+    - name: "Install Compass"
+      sudo: yes
+      gem: name={{ item }} 
+      with_items:
+        - compass 
+
+
+
+
+
+    ### Move to /vagrant on login
+    - name: "Move to /vagrant on login"
+      lineinfile: dest=/home/vagrant/.profile line="cd /vagrant/" create=yes
