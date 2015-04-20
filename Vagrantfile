@@ -6,16 +6,16 @@ Vagrant.configure(VAGRANTFILE_API_VERSION) do |config|
   config.vm.box = "chef/debian-7.6"
 
   # Prepare the Vm
-  config.vm.define "bam-vm" do |machine|
+  config.vm.define "yeoman-vm" do |machine|
 
-        machine.vm.hostname = "bam-vm"
+        machine.vm.hostname = "yeoman-vm"
 
         # Provision the VM using the shell
         config.vm.provision "shell", inline: "apt-get update && apt-get -y install python"
 
         # Provision the VM using ansible
         config.vm.provision "ansible" do |ansible|
-          ansible.playbook = "etc/bam.yaml"
+          ansible.playbook = "etc/yeoman.yaml"
           ansible.extra_vars = { ansible_ssh_user: 'vagrant' }
         end
   end

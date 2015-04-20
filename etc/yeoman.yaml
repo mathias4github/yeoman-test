@@ -17,9 +17,11 @@
         - curl
         - python-software-properties
         - rubygems
+        - libfontconfig1
 
     - name: "Download and modify apt sources for node.js"
-      command: "/usr/bin/curl -sL https://deb.nodesource.com/setup | bash -"
+      sudo: yes
+      shell: "/usr/bin/curl -sL https://deb.nodesource.com/setup | bash -"
 
     - name: "Update the cache"
       sudo: yes
@@ -31,15 +33,29 @@
       with_items:
         - nodejs
 
+    - name: "Update NPM"
+      sudo: yes
+      npm: name={{ item }} global=yes state=latest
+      with_items:
+        - npm
+
+    - name: Clear npm cache
+      shell: npm cache clear
+      sudo: yes
+
     - name: "Install NPM Modules"
       sudo: yes
       npm: name={{ item }} global=yes
       with_items:
         - coffee-script
-        - gulp
         - yo
         - generator-webapp
         - generator-angular
+        - bower
+        - grunt-cli
+        - phantomjs
+        - karma-phantomjs-launcher
+        - karma-jasmine
 
     - name: "Install Compass"
       sudo: yes
