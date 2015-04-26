@@ -5,6 +5,8 @@ Vagrant.configure(VAGRANTFILE_API_VERSION) do |config|
   # Use a small Debian box
   config.vm.box = "chef/debian-7.6"
 
+  config.vm.network "private_network", type: "dhcp"
+
   # Prepare the Vm
   config.vm.define "yeoman-vm" do |machine|
 
@@ -20,3 +22,4 @@ Vagrant.configure(VAGRANTFILE_API_VERSION) do |config|
         end
   end
 end
+
